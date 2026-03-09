@@ -10,7 +10,7 @@ public class Url {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private  long id;
     private String shortLink;
-    @Lob
+
     private String originalUrl;
     private LocalDateTime created;
     private LocalDateTime expires;
