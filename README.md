@@ -1,0 +1,164 @@
+# URL Shortening Service
+
+A RESTful URL Shortening Service built with Spring Boot.
+The application generates short links for long URLs and redirects users to the original URL when the short link is accessed.
+
+This project demonstrates backend development concepts such as REST APIs, database persistence, caching, and containerized deployment.
+
+---
+
+## Features
+
+* Generate a short URL for a long URL
+* Redirect users to the original URL
+* URL expiration support
+* Database persistence using H2
+* Redis caching for faster lookups
+* REST API architecture
+* Docker-ready application
+
+---
+
+## Tech Stack
+
+Backend
+
+* Java
+* Spring Boot
+* Spring Data JPA
+
+Database
+
+* H2 Database (development)
+---
+
+
+## API Endpoints
+
+### Generate Short URL
+
+POST /generate
+
+Example request:
+
+```
+{
+  "url": "https://www.google.com",
+  "expirationDate": "2026-03-10T12:00:00"
+}
+```
+
+Example response:
+
+```
+{
+  "originalUrl": "https://www.google.com",
+  "urlShortLink": "abc123",
+  "expirationDate": "2026-03-10T12:00:00"
+}
+```
+
+---
+
+### Redirect to Original URL
+
+GET /{shortLink}
+
+Example:
+
+```
+GET /abc123
+```
+
+Response: HTTP Redirect → original URL
+
+---
+
+## Project Structure
+
+```
+src
+ └── main
+     ├── controller
+     │   └── UrlShorteningController
+     ├── service
+     │   └── UrlServiceImpl
+     ├── repository
+     │   └── UrlRepository
+     ├── model
+     │   ├── Url
+     │   ├── UrlDto
+     │   ├── UrlResponseDto
+     │   └── UrlErrorResponseDto
+     └── UrlShorteningServiceApplication
+```
+
+---
+
+## Running the Project
+
+### 1. Clone the repository
+
+```
+git clone https://github.com/yourusername/url-shortener.git
+```
+
+### 2. Run the application
+
+```
+mvn spring-boot:run
+```
+
+Application will run on:
+
+```
+http://localhost:8080
+```
+
+---
+
+## H2 Database Console
+
+The application uses an in-memory H2 database.
+
+Console:
+
+```
+http://localhost:8080/h2-console
+```
+
+JDBC URL:
+
+```
+jdbc:h2:mem:urlshortener
+```
+
+
+## Future Improvements
+
+* Replace H2 with PostgreSQL
+* Improve short link generation using Base62 encoding
+* Add Redis caching layer
+* Add Docker containerization
+* Deploy with Kubernetes
+* Add GitHub Actions CI/CD pipeline
+* Add analytics for link usage
+
+---
+
+## Learning Goals
+
+This project was built to practice:
+
+* REST API development
+* Spring Boot architecture
+* Database persistence
+* Caching strategies
+* Containerization
+* DevOps workflows
+
+---
+
+## Author
+
+Built as a backend learning project using Java and Spring Boot.
