@@ -56,7 +56,7 @@ public class UrlShorteningController {
         urlErrorResponseDto.setError("Url doc does not exist or it just expired");
         return new ResponseEntity<>(urlErrorResponseDto, HttpStatus.OK);
     }
-    if (urlToret.getExpires().isBefore(LocalDateTime.now())){
+    if (urlToret.getExpires() != null && urlToret.getExpires().isBefore(LocalDateTime.now())){
         urlService.deleteShortLink(urlToret);
         UrlErrorResponseDto urlErrorResponseDto = new UrlErrorResponseDto();
         urlErrorResponseDto.setStatus("200");

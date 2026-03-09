@@ -7,6 +7,7 @@ import com.example.Url_Shortening_Service.repository.UrlRepository;
 import com.google.common.hash.Hashing;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -24,7 +25,9 @@ public class UrlServiceImpl implements UrlService {
                Url urlTopersist = new Url();
                urlTopersist.setOriginalUrl(urlDto.getUrl());
                urlTopersist.setShortLink(encodedUrl);
+               if (StringUtils.isNotBlank(urlDto.getExpirationDate())){
                urlTopersist.setExpires(getEpirationDate(urlDto.getExpirationDate(),urlTopersist.getCreated()));
+               }
                Url urlToRet =persistShortLink(urlTopersist);
                if (urlToRet != null) return urlToRet;
                return null;
@@ -51,8 +54,15 @@ public class UrlServiceImpl implements UrlService {
 
     @Override
     public Url persistShortLink(Url url) {
+        try{
         Url urlToret = urlRepository.save(url);
-        return url;
+        return urlToret;
+        }
+        catch (DataIntegrityViolationException e){
+            //short_link already exists → regenerate
+            url.setShortLink(encodeUrl(url.getShortLink()+LocalDateTime.now()));
+            return urlRepository.save(url);
+        }
     }
 
     @Override
