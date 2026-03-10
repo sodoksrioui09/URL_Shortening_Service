@@ -8,15 +8,21 @@ import com.google.common.hash.Hashing;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Component
 public class UrlServiceImpl implements UrlService {
+
     @Autowired
     private UrlRepository urlRepository;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public Url gernerateShortLink(UrlDto urlDto) {
@@ -66,8 +72,27 @@ public class UrlServiceImpl implements UrlService {
     }
 
     @Override
-    public Url getEncodedUrl(String url) {
-        Url urlToret = urlRepository.findByShortLink(url);
+    public Url getEncodedUrl(String shortUrl) {
+
+        String cachekey= "shortLink:"+ shortUrl;
+        // erst check redis
+        String cachedUrl = redisTemplate.opsForValue().get(cachekey);
+        if (cachedUrl != null){
+            Url urlToret= new Url();
+            urlToret.setOriginalUrl(cachedUrl);
+            urlToret.setShortLink(shortUrl);
+            return urlToret;
+        }
+        //2 not found in redis then check postgre
+        Url urlToret = urlRepository.findByShortLink(shortUrl);
+        if (urlToret != null){
+            //3 store in redis
+            redisTemplate.opsForValue().set(
+                    cachekey,
+                    urlToret.getOriginalUrl(),
+                    Duration.ofHours(1)
+            );
+        }
         return urlToret;
     }
 
