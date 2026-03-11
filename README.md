@@ -30,6 +30,8 @@ Backend
 Database
 
 * H2 Database (development)
+* PostgreSQL(now)
+* Redis
 ---
 
 
@@ -114,24 +116,6 @@ http://localhost:8080
 ```
 
 ---
-
-
-## H2 Database Console
-
-The application uses an in-memory H2 database.
-
-Console:
-
-```
-http://localhost:8080/h2-console
-```
-
-JDBC URL:
-
-```
-jdbc:h2:mem:urlshortener
-```
-
 
 ## Future Improvements
 
