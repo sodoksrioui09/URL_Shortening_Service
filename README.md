@@ -95,8 +95,6 @@ src
 
 ---
 
-## Running the Project
-
 ### 1. Clone the repository
 
 ```
@@ -117,6 +115,7 @@ http://localhost:8080
 
 ---
 
+
 ## H2 Database Console
 
 The application uses an in-memory H2 database.
@@ -136,14 +135,14 @@ jdbc:h2:mem:urlshortener
 
 ## Future Improvements
 
-* Replace H2 with PostgreSQL
+* Replace H2 with PostgreSQL :✅done
 * Improve short link generation using Base62 encoding
-* Add Redis caching layer
-* Add Docker containerization
+* Add Redis caching layer: ✅done
+* Add Docker containerization :✅done
 * Deploy with Kubernetes
 * Add GitHub Actions CI/CD pipeline
 * Add analytics for link usage
-
+* ⚠️⚠️⚠️Note: Networking between containers may still need troubleshooting. This setup is experimental but a great learning experience for Spring, PostgreSQL, Redis, and Docker.
 ---
 
 ## Learning Goals
